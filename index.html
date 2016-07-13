@@ -25,6 +25,10 @@
         This is a Youtube player. By using the Youtube API, developers are able to implement a Mediametrie JavaScript beacon to measure the stream consumption. The Youtube player API uses callbacks in which methods of the Mediametrie beacon are called to send playing events and positions to the Mediametrie servers.  
       </p>
 
+      <p>
+      	By opening the network panel of the developer console (F12) developers will see requests sended to mediametrie servers (*.estat.com) when stream is played, paused, seeked and stoped. We also trigger polling requests to regularly send the playhead position to our servers
+      </p>
+
 
       <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
       <div id="player"></div>
@@ -80,9 +84,6 @@
               }
             };
           }
-          
-          console.log("PLAYER : ");
-          console.log(player);
 
           // Configure the measure object
           confStreamingAnalytics = {
