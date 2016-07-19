@@ -8,6 +8,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <script src="mediametrie.js"></script>
   </head>
   <body>
     <section class="page-header">
@@ -33,115 +34,7 @@
       <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
       <div id="player"></div>
 
-      <script>
-        // 2. This code loads the IFrame Player API code asynchronously.
-
-        var confStreamingAnalytics;
-        var streamTag;
-
-        var tag = document.createElement('script');
-
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        // 3. This function creates an <iframe> (and YouTube player)
-        //    after the API code downloads.
-        var player;
-
-
-        function onYouTubeIframeAPIReady() {
-          player = new YT.Player('player', {
-            height: '390',
-            width: '640',
-            videoId: 'jUqLNrdMALA',
-            events: {
-              'onReady': onPlayerReady,
-              'onStateChange': onPlayerStateChange
-            }
-          });
-        }
-
-
-        // 4. The API will call this function when the video player is ready.
-        function onPlayerReady(event) {
-          // This code loads the MM JS code asynchronously.
-          var eS = document.createElement('script');
-          eS.type = 'text/javascript';
-          eS.async = true;
-          eS.src = '//prof.estat.com/js/mu-5.1.js';
-          var s = document.getElementsByTagName('script')[0];
-          s.parentNode.insertBefore(eS, s);
-          // 4. Envoi de la mesure
-          if(eS.addEventListener) { // for all browsers except old IEs (< 9)
-            eS.addEventListener('load', function(){
-              eSloaded();
-            }, false)
-          } else { // for old IEs only
-            eS.onreadystatechange = function () {
-              if (eS.readyState in {complete: 1, loaded: 1}) {
-                eSloaded();
-              }
-            };
-          }
-
-          // Configure the measure object
-          confStreamingAnalytics = {
-            serial: 241041208720,
-            measure: "streaming",
-            streaming: {
-              playerObj: player,
-              diffusion: "replay",
-              callbackPosition: getTimerDisplay,
-              playerName: "player",
-              streamName: player.getVideoData().title,
-              streamDuration: player.getDuration()
-            },
-            levels: {
-              level_1: "Film",
-              level_2: "CinÃ©ma"
-            }
-          };
-        }
-
-        eSloaded = function(){
-          streamTag = new eStatTag(confStreamingAnalytics);
-        };
-
-        var getTimerDisplay = function (player) {
-          // Update current time text display.
-          videoPosition = Math.round(player.getCurrentTime());
-          return videoPosition;
-      }
-
-        // 5. The API calls this function when the player's state changes.
-        function onPlayerStateChange(event) {
-          switch (event.data) {
-            case YT.PlayerState.PLAYING:
-              streamTag.notifyPlayer('play');
-                      console.log(player);        
-          console.log(Math.round(player.getCurrentTime()));
-              break;
-            case YT.PlayerState.PAUSED:
-              streamTag.notifyPlayer('pause');
-                      console.log(player);        
-          console.log(Math.round(player.getCurrentTime()));
-              break;
-            case YT.PlayerState.BUFFERING:
-              streamTag.notifyPlayer('pause');
-              break;
-            /*case YT.PlayerState.CUED:
-              console.log(event.target.eventTag);
-              console.log(event);
-              break;*/
-            case YT.PlayerState.ENDED:
-              streamTag.notifyPlayer('stop');
-              break;
-          }
-        }
-
-   
-      </script>
+      
 
 
 
