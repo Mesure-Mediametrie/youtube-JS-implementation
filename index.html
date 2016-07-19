@@ -6,9 +6,6 @@
     <div id="player"></div>
 
     <script>
-    /*
-    TODO 
-    */
       
       // variable for JSON tracking configuration
       var confStreamingAnalytics;
@@ -19,8 +16,9 @@
       // variable for Youtube player object
       var player;
 
-      // workaround variable to avoid beggin by a pause event when buffering is called
-      var hasAlreadyPlayed = false;
+      // memorize the position each second (hack to send the correct position in pause event during a seek action)
+      var last_position = 0;
+
 
       // This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
@@ -49,7 +47,7 @@
         var eS = document.createElement('script');
         eS.type = 'text/javascript';
         eS.async = true;
-        eS.src = '//prof.estat.com/js/mu-5.1.js';
+        eS.src = '//prof.estat.com/js/mu-5.2.js';
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(eS, s);
         
@@ -70,6 +68,7 @@
         confStreamingAnalytics = {
           serial: 241041208720,
           measure: "streaming",
+          implementation: "automatic",
           streaming: {
             playerObj: player,
             diffusion: "replay",
@@ -83,6 +82,13 @@
             level_2: "Cinema"
           }
         };
+
+        // Hack to send the correct position in pause event during a seek action
+        listenPosition = setInterval(function(){
+          last_position = Math.round(getTimerDisplay(player));
+        }, 1000);
+
+
       }
 
       // Instanciate the beacon object when Mediametrie library is fully loaded
@@ -100,16 +106,10 @@
       function onPlayerStateChange(event) {
         switch (event.data) {
           case YT.PlayerState.PLAYING:
-            hasAlreadyPlayed = true;
             streamTag.notifyPlayer('play');
             break;
           case YT.PlayerState.PAUSED:
-            streamTag.notifyPlayer('pause');
-            break;
-          case YT.PlayerState.BUFFERING:
-            if(hasAlreadyPlayed){
-              streamTag.notifyPlayer('pause');
-            }
+            streamTag.notifyPlayer('pause', last_position);
             break;
           case YT.PlayerState.ENDED:
             streamTag.notifyPlayer('stop');
