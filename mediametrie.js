@@ -38,7 +38,7 @@ function onPlayerReady(event) {
 	var eS = document.createElement('script');
 	eS.type = 'text/javascript';
 	eS.async = true;
-	eS.src = '//prof.estat.com/js/mu-5.2.js';
+	eS.src = '//prof.estat.com/js/mu-integration-5.2.js';
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(eS, s);
 	
@@ -59,7 +59,7 @@ function onPlayerReady(event) {
 	confStreamingAnalytics = {
 		serial: 241041208720,
 		measure: "streaming",
-		implementation: "automatic",
+		implementation: "replay",
 		streaming: {
 			playerObj: player,
 			diffusion: "replay",
